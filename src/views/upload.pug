@@ -1,0 +1,7 @@
+extends base
+
+block content 
+  //- /videos/upload로 post request를 보냄 (action을 이용해 다른 url로 보낼 수도 있음!)
+  form(method="POST" action="/videos/upload")
+    input(placeholder="Title" required type="text" name="title")
+    input(type="submit" value="Upload Video")
