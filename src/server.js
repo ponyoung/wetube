@@ -1,5 +1,6 @@
 import express from "express";
 import session from "express-session";
+import MongoStore from "connect-mongo";
 import morgan from "morgan";
 import rootRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
@@ -18,9 +19,11 @@ app.use(express.urlencoded({ extended: true }));
 // Session middleware should come before router!
 app.use(
   session({
-    secret: "Hello!",
-    resave: true,
-    saveUninitialized: true,
+    secret: process.env.COOKIE_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    // Save at Mongo!
+    store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
   })
 );
 

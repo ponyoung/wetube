@@ -48,7 +48,7 @@ export const postLogin = async (req, res) => {
   if (!user) {
     return res.status(400).render("login", {
       pageTitle,
-      errorMessage: "An account with this user name does not exists.",
+      errorMessage: "An account with this username does not exists.",
     });
   }
   const ok = await bcrypt.compare(password, user.password);
@@ -58,7 +58,7 @@ export const postLogin = async (req, res) => {
       errorMessage: "Wrong password.",
     });
   }
-  // session
+  // initialize session
   req.session.loggedIn = true;
   req.session.user = user;
   return res.redirect("/");
