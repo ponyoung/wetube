@@ -5,7 +5,6 @@ export const getJoin = (req, res) => {
   return res.render("join", { pageTitle: "Join" });
 };
 export const postJoin = async (req, res) => {
-  console.log(req.body);
   const { name, username, email, password, password2, location } = req.body;
   const pageTitle = "Join";
   if (password !== password2) {
@@ -156,6 +155,18 @@ export const postEdit = async (req, res) => {
     },
     body: { name, email, username, location },
   } = req;
+  const sessionUsername = req.session.user.username;
+  const sessionEmail = req.session.user.email;
+  const usernameExists =
+    username != sessionUsername ? await User.exists({ username }) : undefined;
+  const emailExists =
+    email != sessionEmail ? await User.exists({ email }) : undefined;
+  if (usernameExists || emailExists) {
+    return res.status(400).render("edit-profile", {
+      pagetitle: "Edit Profile",
+      errorMessage: "This username/email is already taken.",
+    });
+  }
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
